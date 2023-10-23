@@ -1,0 +1,17 @@
+<p-card [header]="course.title" >
+  <ng-template pTemplate="subtitle">
+    <div class="flex flex-row gap-2">
+      <span class="pi pi-clock"> {{getTimeFromMins(course.duration)}} </span>
+      <span class="pi pi-calendar"> {{course.creationDate | date:'fullDate':'ru'}} </span>
+    </div>
+  </ng-template>
+  <div class="flex flex-row gap-2">
+    <div style="width:90%">
+      <p>{{course.description}}</p>
+    </div>
+    <div style="width:10%">
+      <button pButton class="p-button-sm p-button-danger p-button-text" icon="pi pi-trash" style="float: right" (click)="delete(course)"></button>
+      <button pButton class="p-button-sm p-button-text" icon="pi pi-pencil" style="float: right" (click)="edit(course)"></button>
+    </div>
+  </div>
+</p-card>
