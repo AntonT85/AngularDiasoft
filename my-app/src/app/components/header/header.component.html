@@ -2,8 +2,8 @@
   <div class="main-header-sub">
     <app-logo></app-logo>
   </div>
-  <div class="main-header-sub">
-    <span class="pi pi-user"> Логин пользователя</span>
-    <button pButton class="p-button-sm p-button-text" icon="pi pi-sign-out" label="Выход"></button>
+  <div class="main-header-sub" *ngIf="isAuthenticated">
+    <span class="pi pi-user"> {{login}} </span>
+    <button pButton class="p-button-sm p-button-text" icon="pi pi-sign-out" label="Выход" (click)="logOut()"></button>
   </div>
 </header>

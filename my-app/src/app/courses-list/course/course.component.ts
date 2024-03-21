@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ICourse} from "../../shared/interfaces/course/course.interface";
+import {ConfirmationService} from "primeng/api";
 
 @Component({
   selector: 'app-course',
@@ -11,11 +12,21 @@ export class CourseComponent {
   @Output() editCourse: EventEmitter<ICourse> = new EventEmitter<ICourse>();
   @Output() deleteCourse: EventEmitter<ICourse> = new EventEmitter<ICourse>();
 
+  constructor(private confirmationService: ConfirmationService) {
+  }
+
   edit(course: ICourse): void {
     this.editCourse.emit(course);
   }
 
   delete(course: ICourse): void {
-    this.deleteCourse.emit(course);
+    this.confirmationService.confirm({
+      header: 'Удалить курс?',
+      message: `Вы действительно хотите удалить этот курс ${course.title}?`,
+      key: 'confirmDeleteAlert',
+      accept: () => this.deleteCourse.emit(course),
+      reject: () => {
+      },
+    });
   }
 }

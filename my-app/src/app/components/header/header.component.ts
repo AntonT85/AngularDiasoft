@@ -1,13 +1,5 @@
-import {
-  AfterContentChecked,
-  AfterContentInit,
-  AfterViewChecked,
-  AfterViewInit,
-  Component,
-  DoCheck,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {AuthService} from "../../services/auth/auth-service";
 
 @Component({
   selector: 'app-header',
@@ -15,32 +7,45 @@ import {
   styleUrls: ['./header.component.less']
 })
 
-export class HeaderComponent implements OnInit, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy {
-  ngOnInit(): void {
-    console.log('ngOnInit');
+export class HeaderComponent {
+
+  constructor(private authService: AuthService) {
   }
 
-  ngDoCheck(): void {
-    console.log('ngDoCheck');
+  @Input() isAuthenticated: boolean | undefined;
+  public login = this.authService.GetUserInfo();
+
+  /*
+    ngOnInit(): void {
+      console.log('ngOnInit');
+    }
+
+    ngDoCheck(): void {
+      console.log('ngDoCheck');
+    }
+
+    ngAfterContentInit(): void {
+      console.log('ngAfterContentInit');
+    }
+
+    ngAfterContentChecked(): void {
+      console.log('ngAfterContentChecked');
+    }
+
+    ngAfterViewInit(): void {
+      console.log('ngAfterViewInit');
+    }
+
+    ngAfterViewChecked(): void {
+      console.log('ngAfterViewChecked');
+    }
+
+    ngOnDestroy(): void {
+      console.log('ngOnDestroy');
+    }
+  */
+  public logOut(): void {
+    this.authService.logout();
   }
 
-  ngAfterContentInit(): void {
-    console.log('ngAfterContentInit');
-  }
-
-  ngAfterContentChecked(): void {
-    console.log('ngAfterContentChecked');
-  }
-
-  ngAfterViewInit(): void {
-    console.log('ngAfterViewInit');
-  }
-
-  ngAfterViewChecked(): void {
-    console.log('ngAfterViewChecked');
-  }
-
-  ngOnDestroy(): void {
-    console.log('ngOnDestroy');
-  }
 }
