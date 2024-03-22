@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ICourse} from "../shared/course/course.interface";
+import {ICourse} from "../shared/interfaces/course/course.interface";
 import {MenuItem} from "primeng/api";
+import {FilterPipe} from "../shared/pipes/filter/filter.pipe";
 
 @Component({
   selector: 'app-courses-list',
@@ -9,9 +10,13 @@ import {MenuItem} from "primeng/api";
 })
 export class CoursesListComponent implements OnInit {
   public coursesList: ICourse[] = [];
+  public coursesFilteredList: ICourse[] = [];
   items: MenuItem[] = [{label: 'Courses'}];
   home: MenuItem = {icon: 'pi pi-home', routerLink: '/'};
   search: any;
+
+  constructor(private filter: FilterPipe) {
+  }
 
   ngOnInit(): void {
     this.coursesList = [
@@ -20,23 +25,27 @@ export class CoursesListComponent implements OnInit {
         title: 'Программирование',
         creationDate: new Date(2024, 3, 1),
         duration: 900,
-        description: 'Тестирование, фронтенд, бэкенд, DevOps, алгоритмы'
+        description: 'Тестирование, фронтенд, бэкенд, DevOps, алгоритмы',
+        topRated: true
       },
       {
         id: 2,
         title: 'Анализ данных',
-        creationDate: new Date(2024, 4, 10),
+        creationDate: new Date(2024, 2, 1),
         duration: 560,
-        description: 'SQL, аналитика, Dara Science и архитектура данных'
+        description: 'SQL, аналитика, Dara Science и архитектура данных',
+        topRated: false
       },
       {
         id: 3,
         title: 'Дизайн',
-        creationDate: new Date(2024, 5, 2),
-        duration: 420,
-        description: 'Графический, интерфейсный и продуктовый'
+        creationDate: new Date(2023, 5, 2),
+        duration: 50,
+        description: 'Графический, интерфейсный и продуктовый',
+        topRated: true
       }
-    ]
+    ];
+    this.coursesFilteredList = this.coursesList;
   }
 
   public loadMore(): void {
@@ -52,6 +61,6 @@ export class CoursesListComponent implements OnInit {
   }
 
   doSearch(): void {
-    console.log(this.search);
+    this.coursesFilteredList = this.filter.transform(this.coursesList, 'title', this.search);
   }
 }

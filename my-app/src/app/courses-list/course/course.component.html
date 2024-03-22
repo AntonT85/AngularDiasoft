@@ -1,7 +1,13 @@
-<p-card [header]="course.title" >
+<p-card [appHighlightByDate]="course.creationDate" [ngClass] = "{'isTopRated' : course.topRated}">
+  <ng-template pTemplate="title">
+    <div class="flex flex-row gap-2">
+      {{course.title | uppercase}}
+      <div *ngIf="course.topRated" style="color:orange">&#9733;</div>
+    </div>
+  </ng-template>
   <ng-template pTemplate="subtitle">
     <div class="flex flex-row gap-2">
-      <span class="pi pi-clock"> {{getTimeFromMins(course.duration)}} </span>
+      <span class="pi pi-clock"> {{course.duration | duration}} </span>
       <span class="pi pi-calendar"> {{course.creationDate | date:'fullDate':'ru'}} </span>
     </div>
   </ng-template>
@@ -10,8 +16,10 @@
       <p>{{course.description}}</p>
     </div>
     <div style="width:10%">
-      <button pButton class="p-button-sm p-button-danger p-button-text" icon="pi pi-trash" style="float: right" (click)="delete(course)"></button>
-      <button pButton class="p-button-sm p-button-text" icon="pi pi-pencil" style="float: right" (click)="edit(course)"></button>
+      <button pButton class="p-button-sm p-button-danger p-button-text" icon="pi pi-trash" style="float: right"
+              (click)="delete(course)"></button>
+      <button pButton class="p-button-sm p-button-text" icon="pi pi-pencil" style="float: right"
+              (click)="edit(course)"></button>
     </div>
   </div>
 </p-card>

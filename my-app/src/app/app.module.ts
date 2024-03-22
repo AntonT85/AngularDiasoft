@@ -17,6 +17,10 @@ import localeRu from '@angular/common/locales/ru';
 import {InputTextModule} from 'primeng/inputtext';
 import {BreadcrumbModule} from 'primeng/breadcrumb';
 import {FormsModule} from "@angular/forms";
+import {HighlightByDateDirective} from "./shared/directives/highlight-by-date.directive";
+import { DurationPipe } from './shared/pipes/duration/duration.pipe';
+import { OrderByPipe } from './shared/pipes/orderBy/order-by.pipe';
+import { FilterPipe } from './shared/pipes/filter/filter.pipe';
 
 registerLocaleData(localeRu, 'ru');
 
@@ -27,7 +31,11 @@ registerLocaleData(localeRu, 'ru');
     FooterComponent,
     LogoComponent,
     CoursesListComponent,
-    CourseComponent
+    CourseComponent,
+    HighlightByDateDirective,
+    DurationPipe,
+    OrderByPipe,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
@@ -40,7 +48,7 @@ registerLocaleData(localeRu, 'ru');
     BreadcrumbModule,
     FormsModule
   ],
-  providers: [{provide: LOCALE_ID, useValue: 'ru'}],
+  providers: [{provide: LOCALE_ID, useValue: 'ru'}, FilterPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {
