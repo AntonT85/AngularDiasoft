@@ -8,20 +8,21 @@ import {CardModule} from "primeng/card";
 import {InputTextModule} from "primeng/inputtext";
 import {BreadcrumbModule} from "primeng/breadcrumb";
 import {FormsModule} from "@angular/forms";
-import {HighlightByDateDirective} from "../shared/directives/highlight-by-date.directive";
-import {DurationPipe} from "../shared/pipes/duration/duration.pipe";
-import {OrderByPipe} from "../shared/pipes/orderBy/order-by.pipe";
 import {FilterPipe} from "../shared/pipes/filter/filter.pipe";
+import {CourseAddComponent} from './course-add/course-add.component';
+import {InputTextareaModule} from "primeng/inputtextarea";
+import {InputNumberModule} from "primeng/inputnumber";
+import {CalendarModule} from "primeng/calendar";
+import {SharedModule} from "../shared/shared.module";
 
 
 @NgModule({
   declarations: [
     CoursesListComponent,
     CourseComponent,
-    HighlightByDateDirective,
-    DurationPipe,
-    OrderByPipe,
-    FilterPipe
+    CourseAddComponent,
+    FilterPipe,
+    CourseAddComponent,
   ],
   imports: [
     CommonModule,
@@ -31,6 +32,10 @@ import {FilterPipe} from "../shared/pipes/filter/filter.pipe";
     InputTextModule,
     BreadcrumbModule,
     FormsModule,
+    InputTextareaModule,
+    InputNumberModule,
+    CalendarModule,
+    SharedModule,
   ],
   providers: [FilterPipe],
   exports: [CoursesListComponent]
