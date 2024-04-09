@@ -1,12 +1,4 @@
-<app-login-page *ngIf="!isAuthenticated" (userData)="onLogging($event)"></app-login-page>
-<div class="wrapper" *ngIf="isAuthenticated">
-  <app-header [isAuthenticated]="true"></app-header>
-  <div class="py-2 px-4 page-body">
-    <app-courses-list></app-courses-list>
-  </div>
-  <app-footer></app-footer>
-</div>
-
+<router-outlet></router-outlet>
 
 <p-confirmDialog #confirmDeleteAlert key="confirmDeleteAlert">
   <p-footer>
@@ -14,4 +6,3 @@
     <button type="button" pButton (click)="confirmDeleteAlert.accept()" label="Удалить" class="p-button-sm p-button-danger"></button>
   </p-footer>
 </p-confirmDialog>
-

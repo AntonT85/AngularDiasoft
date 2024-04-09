@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'app-select-minutes',
@@ -7,7 +7,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectMinutesComponent {
-  public min: any;
+  @Input() min: any;
   @Output() minutes: EventEmitter<any> = new EventEmitter<any>();
 
   public send() {

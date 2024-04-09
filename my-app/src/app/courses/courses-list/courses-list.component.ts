@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {ICourse} from "../shared/interfaces/course/course.interface";
 import {ConfirmationService, MenuItem} from "primeng/api";
-import {FilterPipe} from "../shared/pipes/filter/filter.pipe";
-import {CoursesService} from "../services/courses/courses.service";
+import {Router} from "@angular/router";
+import {CoursesService} from "../../services/courses/courses.service";
+import {ICourse} from "../../shared/interfaces/course/course.interface";
+import {FilterPipe} from "../../shared/pipes/filter/filter.pipe";
 
 @Component({
   selector: 'app-courses-list',
@@ -10,17 +11,17 @@ import {CoursesService} from "../services/courses/courses.service";
   styleUrls: ['./courses-list.component.less']
 })
 export class CoursesListComponent implements OnInit {
+  items: MenuItem[] = [{label: 'Courses', routerLink: '/courses'}];
+  home: MenuItem = {icon: 'pi pi-home'};
   public coursesList: ICourse[] = [];
   public coursesFilteredList: ICourse[] = [];
-  items: MenuItem[] = [{label: 'Courses'}];
-  home: MenuItem = {icon: 'pi pi-home', routerLink: '/'};
   search: any;
-  public addMode: boolean = false;
 
   constructor(
     private filter: FilterPipe,
     private readonly coursesService: CoursesService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private readonly router: Router
   ) {
   }
 
@@ -38,7 +39,8 @@ export class CoursesListComponent implements OnInit {
   }
 
   onEditedCourse(course: ICourse): void {
-    console.log(course);
+    //console.log(course);
+    this.router.navigate(['courses/' + course.id]);
   }
 
   onDeletedCourse(course: ICourse): void {
@@ -46,7 +48,10 @@ export class CoursesListComponent implements OnInit {
       header: 'Удалить курс?',
       message: `Вы действительно хотите удалить этот курс ${course.title}?`,
       key: 'confirmDeleteAlert',
-      accept: () => this.coursesService.removeItem(course.id),
+      accept: () => {
+        this.coursesService.removeItem(course.id);
+        this.doSearch();
+      },
       reject: () => {
       },
     });
@@ -58,6 +63,6 @@ export class CoursesListComponent implements OnInit {
   }
 
   addCourse(): void {
-    this.addMode = true;
+    this.router.navigate(['courses/new']);
   }
 }
