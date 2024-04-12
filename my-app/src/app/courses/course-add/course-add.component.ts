@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {CoursesService} from "../../services/courses/courses.service";
 import {ICourse} from "../../shared/interfaces/course/course.interface";
@@ -15,18 +15,24 @@ export class CourseAddComponent {
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly coursesService: CoursesService
+    private readonly coursesService: CoursesService,
+    private readonly changeDetectorRef: ChangeDetectorRef
   ) {
     this.id = route.snapshot.params['id'];
     if (this.id != null) {
-      const course: ICourse | undefined = this.coursesService.getItemById(this.id);
-      if (course != null) {
-        this.title = course.title;
-        this.description = course.description;
-        this.creationDate = course.creationDate;
-        this.duration = course.duration;
-        this.items.push({label: this.title})
-      }
+      this.coursesService.getItemById(this.id).subscribe(response => {
+        const course: ICourse = response;
+        if (course != null) {
+          this.header = "Изменение курса";
+          this.title = course.title;
+          this.description = course.description;
+          if (course.creationDate != null)
+            this.creationDate = new Date(course.creationDate);
+          this.duration = course.duration;
+          this.items.push({label: this.title});
+          changeDetectorRef.detectChanges();
+        }
+      });
     }
   }
 
@@ -37,6 +43,7 @@ export class CourseAddComponent {
   public description: any;
   public creationDate: any;
   public duration: any;
+  header:string="Новый курс";
 
   public cancel(): void {
     this.router.navigate(['courses']);
@@ -52,9 +59,9 @@ export class CourseAddComponent {
       topRated: false
     };
     if (this.id != null) {
-      this.coursesService.updateItem(this.id, newData)
+      this.coursesService.updateItem(this.id, newData).subscribe()
     } else {
-      this.coursesService.createCourse(newData);
+      this.coursesService.createCourse(newData).subscribe();
     }
     this.router.navigate(['courses']);
   }

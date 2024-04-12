@@ -16,8 +16,13 @@ export class HeaderComponent {
   ) {
   }
 
-  public isAuthenticated: boolean | undefined = this.authService.isAuthenticated();
-  public login = this.authService.GetUserInfo();
+  get isAuthenticated(): boolean | undefined {
+    return this.authService.isAuthenticated()
+  };
+
+  get login(): string | undefined {
+    return this.authService.getUserData();
+  };
 
   /*
     ngOnInit(): void {
