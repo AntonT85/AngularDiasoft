@@ -1,4 +1,6 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component} from '@angular/core';
+import {Router} from "@angular/router";
+import {AuthService} from "../services/auth/auth-service";
 
 @Component({
   selector: 'app-login-page',
@@ -6,11 +8,19 @@ import {Component, EventEmitter, Output} from '@angular/core';
   styleUrls: ['./login-page.component.less']
 })
 export class LoginPageComponent {
-  @Output() userData: EventEmitter<{}> = new EventEmitter<{}>();
   userLogin: any;
   userPassword: any;
 
+  constructor(
+    private readonly router: Router,
+    private readonly authService: AuthService) {
+  }
+
   public login() {
-    this.userData.emit({login: this.userLogin, password: this.userPassword})
+    this.authService.login(this.userLogin, this.userPassword);
+    if (this.authService.isAuthenticated()) {
+      console.log("Выполнен вход в систему");
+      this.router.navigate(['courses']);
+    }
   }
 }

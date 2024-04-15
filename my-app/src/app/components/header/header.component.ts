@@ -1,5 +1,6 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import {AuthService} from "../../services/auth/auth-service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -9,10 +10,13 @@ import {AuthService} from "../../services/auth/auth-service";
 
 export class HeaderComponent {
 
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService,
+    private readonly router: Router,
+  ) {
   }
 
-  @Input() isAuthenticated: boolean | undefined;
+  public isAuthenticated: boolean | undefined = this.authService.isAuthenticated();
   public login = this.authService.GetUserInfo();
 
   /*
@@ -46,6 +50,7 @@ export class HeaderComponent {
   */
   public logOut(): void {
     this.authService.logout();
+    this.router.navigate(['']);
   }
 
 }

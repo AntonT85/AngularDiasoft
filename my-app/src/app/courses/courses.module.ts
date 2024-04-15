@@ -1,7 +1,8 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CoursesListComponent} from "./courses-list.component";
+import {CoursesComponent} from "./courses.component";
 import {CourseComponent} from "./course/course.component";
+import {CoursesListComponent} from "./courses-list/courses-list.component";
 import {ImageModule} from "primeng/image";
 import {ButtonModule} from "primeng/button";
 import {CardModule} from "primeng/card";
@@ -14,15 +15,16 @@ import {InputTextareaModule} from "primeng/inputtextarea";
 import {InputNumberModule} from "primeng/inputnumber";
 import {CalendarModule} from "primeng/calendar";
 import {SharedModule} from "../shared/shared.module";
+import {CoursesRoutingModule} from './courses-routing.module';
 
 
 @NgModule({
   declarations: [
-    CoursesListComponent,
+    CoursesComponent,
     CourseComponent,
     CourseAddComponent,
     FilterPipe,
-    CourseAddComponent,
+    CoursesListComponent,
   ],
   imports: [
     CommonModule,
@@ -36,9 +38,10 @@ import {SharedModule} from "../shared/shared.module";
     InputNumberModule,
     CalendarModule,
     SharedModule,
+    CoursesRoutingModule,
   ],
   providers: [FilterPipe],
-  exports: [CoursesListComponent]
+  exports: [CoursesComponent]
 })
-export class CoursesListModule {
+export class CoursesModule {
 }
