@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {ICourse} from "../../shared/interfaces/course/course.interface";
 
 @Component({
   selector: 'app-course',
   templateUrl: './course.component.html',
-  styleUrls: ['./course.component.less']
+  styleUrls: ['./course.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CourseComponent {
   @Input() public course: ICourse = {} as ICourse;

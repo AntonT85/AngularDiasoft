@@ -17,7 +17,7 @@ export class HighlightByDateDirective implements AfterViewInit {
     if (this.creationDate == null) return;
     const curDate: number = new Date().getTime();
     const courseDate: number = this.creationDate.getTime();
-    if (courseDate < curDate && HighlightByDateDirective.getDiffDays(courseDate, curDate) <= 14) {
+    if (courseDate < curDate && this.getDiffDays(courseDate, curDate) <= 14) {
       const [child] = this.element.nativeElement.children;
       this.render.setStyle(child, 'border', '2px solid #22c55e')
     } else if (courseDate > curDate) {
@@ -26,7 +26,7 @@ export class HighlightByDateDirective implements AfterViewInit {
     }
   }
 
-  private static getDiffDays(date1: number, date2: number): number {
+  private getDiffDays(date1: number, date2: number): number {
     let timeDiff = Math.abs(date2 - date1);
     return Math.ceil(timeDiff / (1000 * 3600 * 24));
   }

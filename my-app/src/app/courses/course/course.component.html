@@ -1,14 +1,12 @@
 <p-card [appHighlightByDate]="course.creationDate" [ngClass] = "{'isTopRated' : course.topRated}">
   <ng-template pTemplate="title">
-    <div class="flex flex-row gap-2">
+    <div class="flex gap-2">
       {{course.title | uppercase}}
       <div *ngIf="course.topRated" style="color:orange">&#9733;</div>
-    </div>
-  </ng-template>
-  <ng-template pTemplate="subtitle">
-    <div class="flex flex-row gap-2">
-      <span class="pi pi-clock"> {{course.duration | duration}} </span>
-      <span class="pi pi-calendar"> {{course.creationDate | date:'fullDate':'ru'}} </span>
+      <div class="right">
+        <span class="pi pi-clock"> {{course.duration | duration}} </span>
+        <span class="pi pi-calendar"> {{course.creationDate | date:'fullDate':'ru'}} </span>
+      </div>
     </div>
   </ng-template>
   <div class="flex flex-row gap-2">
