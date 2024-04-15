@@ -41,6 +41,7 @@ export class CoursesService {
   }
 
   public createCourse(course: ICourse): void {
+    course.id = this.courses.length+1;
     this.courses.push(course);
   }
 

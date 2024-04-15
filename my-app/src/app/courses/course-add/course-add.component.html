@@ -1,0 +1,22 @@
+<div class="mb-2 mt-2">
+  <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
+</div>
+
+<p-card header="Новый курс" class="coursAdd">
+
+  <div class="flex flex-column gap-5">
+    <input pInputText id="title" [(ngModel)]="title" placeholder="Наименование*" class="w-full"/>
+
+    <textarea id="description" rows="5" cols="30" pInputTextarea [(ngModel)]="description" class="w-full"
+              placeholder="Описание*"></textarea>
+    <app-select-minutes [min]="duration" (minutes)="onMinutesChange($event)"></app-select-minutes>
+    <p-calendar [(ngModel)]="creationDate" [showIcon]="true" placeholder="Дата*"></p-calendar>
+    <app-autor></app-autor>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="flex gap-2">
+      <button pButton class="p-button-outlined" label="Отмена" (click)="cancel()"></button>
+      <button pButton label="Сохранить" (click)="save()"></button>
+    </div>
+  </ng-template>
+</p-card>
