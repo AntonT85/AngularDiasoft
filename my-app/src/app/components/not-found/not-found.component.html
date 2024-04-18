@@ -1,16 +1,8 @@
-<div class="wrapper">
-  <app-header></app-header>
-  <div class="py-3 page-body">
-
-    <p-card header="Страница не найдена" class="error">
-      <ng-template pTemplate="header">
-        <img alt="Card" src="../../assets/nothing-found.png" style="width:195px; width:153px"/>
-      </ng-template>
-      <ng-template pTemplate="footer">
-        <button pButton label="На главную" (click)="toMain()"></button>
-      </ng-template>
-    </p-card>
-
-  </div>
-  <app-footer></app-footer>
-</div>
+<p-card header="Страница не найдена" class="error">
+  <ng-template pTemplate="header">
+    <img alt="Card" src="../../assets/nothing-found.png" style="width:153px"/>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton label="На главную" (click)="toMain()"></button>
+  </ng-template>
+</p-card>

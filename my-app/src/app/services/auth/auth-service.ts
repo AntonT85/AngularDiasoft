@@ -1,35 +1,54 @@
 import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from "@angular/common/http";
+import {IUser} from "../../shared/interfaces/user/user.interface";
+import {Observable} from "rxjs";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly autUrl = "http://localhost:3000";
 
-  constructor() {
+  constructor(private readonly httpClient: HttpClient) {
   }
 
-  public login(login: string, password: string): string {
-    localStorage.setItem("userData", JSON.stringify({login: login, password: password}));
-    const token = "1";
-    localStorage.setItem("access_token", token);
-    return token;
+  public login(email: string, password: string): Observable<any> {
+    let params = new HttpParams().set('email', email).set('password', password);
+    return this.httpClient.get<IUser[]>(`${this.autUrl}/users`, {params}).pipe(
+      map((result: IUser[]) => {
+        if (result.length > 0) {
+          localStorage.setItem("userData", result[0].firstName + ' ' + result[0].lastName);
+          localStorage.setItem("access_token", result[0].fakeToken);
+        }
+      })
+    );
   }
 
   public logout(): void {
-    console.log("Выход " + this.GetUserInfo());
-    localStorage.removeItem("userData");
-    localStorage.removeItem("access_token");
+    this.GetUserInfo().subscribe((result: IUser[]) => {
+      if (result.length > 0) {
+        console.log("Выход " + localStorage.getItem("userData"));
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("userData");
+      }
+    })
   }
 
   public isAuthenticated(): boolean {
-    return localStorage.getItem("userData") != null;
+    return localStorage.getItem("access_token") != null;
   }
 
-  public GetUserInfo(): string | null {
-    let data = localStorage.getItem("userData");
-    if (data) {
-      return JSON.parse(data).login;
-    }
-    return null;
+  public GetUserInfo(): Observable<IUser[]> {
+    let params = new HttpParams().set('fakeToken', localStorage.getItem("access_token") + "");
+    return this.httpClient.get<IUser[]>(`${this.autUrl}/users`, {params});
+  }
+
+  public getAuthorizationToken(): string {
+    return localStorage.getItem("access_token") + "";
+  }
+
+  public getUserData(): string {
+    return localStorage.getItem("userData") + "";
   }
 }

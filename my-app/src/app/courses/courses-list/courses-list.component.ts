@@ -1,21 +1,23 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ConfirmationService, MenuItem} from "primeng/api";
 import {Router} from "@angular/router";
 import {CoursesService} from "../../services/courses/courses.service";
 import {ICourse} from "../../shared/interfaces/course/course.interface";
 import {FilterPipe} from "../../shared/pipes/filter/filter.pipe";
+import {take, tap} from "rxjs";
 
 @Component({
   selector: 'app-courses-list',
   templateUrl: './courses-list.component.html',
   styleUrls: ['./courses-list.component.less']
 })
-export class CoursesListComponent implements OnInit {
+export class CoursesListComponent {
   items: MenuItem[] = [{label: 'Courses', routerLink: '/courses'}];
   home: MenuItem = {icon: 'pi pi-home'};
+
   public coursesList: ICourse[] = [];
-  public coursesFilteredList: ICourse[] = [];
   search: any;
+  page: number = 1;
 
   constructor(
     private filter: FilterPipe,
@@ -23,23 +25,21 @@ export class CoursesListComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private readonly router: Router
   ) {
-  }
-
-  ngOnInit(): void {
-    this.coursesList = this.coursesService.getList();
-    this.coursesFilteredList = this.coursesList;
+    this.doSearch();
   }
 
   public clearFilter(): void {
     this.search = "";
+    this.page = 1;
+    this.doSearch();
   }
 
   public loadMore(): void {
-    console.log('loadMore');
+    this.page++;
+    this.doSearch();
   }
 
   onEditedCourse(course: ICourse): void {
-    //console.log(course);
     this.router.navigate(['courses/' + course.id]);
   }
 
@@ -49,8 +49,10 @@ export class CoursesListComponent implements OnInit {
       message: `Вы действительно хотите удалить этот курс ${course.title}?`,
       key: 'confirmDeleteAlert',
       accept: () => {
-        this.coursesService.removeItem(course.id);
-        this.doSearch();
+        this.coursesService.removeItem(course.id).pipe(
+          take(1),
+          tap(() => this.doSearch())
+        ).subscribe();
       },
       reject: () => {
       },
@@ -59,7 +61,7 @@ export class CoursesListComponent implements OnInit {
   }
 
   doSearch(): void {
-    this.coursesFilteredList = this.filter.transform(this.coursesList, 'title', this.search);
+    this.coursesService.getList(this.page, this.search).subscribe((result) => this.coursesList = result);
   }
 
   addCourse(): void {

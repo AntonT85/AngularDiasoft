@@ -15,12 +15,12 @@
   </div>
 </div>
 <div class="flex flex-column gap-4 mb-6">
-  <div class="flex justify-content-between align-items-center flex-wrap gap-4" *ngIf="coursesFilteredList.length>0">
-    <app-course *ngFor="let course of coursesFilteredList | orderBy : 'creationDate'" [course]="course"
+  <div class="flex justify-content-between align-items-center flex-wrap gap-4" *ngIf="coursesList.length>0">
+    <app-course *ngFor="let course of coursesList" [course]="course"
                 (editCourse)="onEditedCourse($event)" (deleteCourse)="onDeletedCourse($event)"
                 style="width: 100%;"></app-course>
   </div>
-  <div *ngIf="coursesFilteredList.length==0">
+  <div *ngIf="coursesList.length==0">
     <p-card header="Нет данных" class="error">
       <ng-template pTemplate="header">
         <img alt="Card" src="../../assets/nothing-found.png" style="width:160px"/>

@@ -16,7 +16,7 @@ export class HighlightByDateDirective implements AfterViewInit {
   public ngAfterViewInit(): void {
     if (this.creationDate == null) return;
     const curDate: number = new Date().getTime();
-    const courseDate: number = this.creationDate.getTime();
+    const courseDate: number = new Date(this.creationDate).getTime();
     if (courseDate < curDate && this.getDiffDays(courseDate, curDate) <= 14) {
       const [child] = this.element.nativeElement.children;
       this.render.setStyle(child, 'border', '2px solid #22c55e')

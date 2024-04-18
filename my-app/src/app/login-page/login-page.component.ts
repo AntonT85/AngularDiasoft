@@ -17,10 +17,12 @@ export class LoginPageComponent {
   }
 
   public login() {
-    this.authService.login(this.userLogin, this.userPassword);
-    if (this.authService.isAuthenticated()) {
-      console.log("Выполнен вход в систему");
-      this.router.navigate(['courses']);
-    }
+    this.authService.login(this.userLogin, this.userPassword).subscribe(() => {
+        if (this.authService.isAuthenticated()) {
+          console.log("Выполнен вход в систему");
+          this.router.navigate(['courses']);
+        }
+      }
+    );
   }
 }

@@ -12,6 +12,8 @@ import {LoginPageModule} from "./login-page/login-page.module";
 import {SharedModule} from "./shared/shared.module";
 import {NotFoundComponent} from './components/not-found/not-found.component';
 import {CardModule} from "primeng/card";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {TokenInterceptor} from "./interceptors/token.interceptor";
 
 registerLocaleData(localeRu, 'ru');
 
@@ -28,8 +30,17 @@ registerLocaleData(localeRu, 'ru');
     BrowserAnimationsModule,
     SharedModule,
     CardModule,
+    HttpClientModule
   ],
-  providers: [{provide: LOCALE_ID, useValue: 'ru'}, ConfirmationService],
+  providers: [
+    {provide: LOCALE_ID, useValue: 'ru'},
+    ConfirmationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

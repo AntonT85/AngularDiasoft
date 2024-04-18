@@ -1,69 +1,40 @@
 import {Injectable} from '@angular/core';
 import {ICourse} from "../../shared/interfaces/course/course.interface";
+import {HttpClient, HttpParams} from "@angular/common/http";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesService {
+  private readonly coursesUrl = "http://localhost:3000";
 
-  constructor() {
+  constructor(private readonly httpClient: HttpClient) {
   }
 
-  private courses: ICourse[] = [
-    {
-      id: 1,
-      title: 'Программирование',
-      creationDate: new Date(2024, 3, 1),
-      duration: 900,
-      description: 'Тестирование, фронтенд, бэкенд, DevOps, алгоритмы',
-      topRated: true
-    },
-    {
-      id: 2,
-      title: 'Анализ данных',
-      creationDate: new Date(2024, 2, 1),
-      duration: 560,
-      description: 'SQL, аналитика, Dara Science и архитектура данных',
-      topRated: false
-    },
-    {
-      id: 3,
-      title: 'Дизайн',
-      creationDate: new Date(2023, 5, 2),
-      duration: 50,
-      description: 'Графический, интерфейсный и продуктовый',
-      topRated: true
+  public getList(page: number, field: string): Observable<ICourse[]> {
+    if (!page) page = 1;
+    let count = 10 * page;
+    let params = new HttpParams().set('_limit', count);
+    if (field != null && field != "") {
+      params = params.set('q', field);
     }
-  ];
-
-  public getList(): ICourse[] {
-    return this.courses;
+    return this.httpClient.get<ICourse[]>(`${this.coursesUrl}/videocourses`, {params});
   }
 
-  public createCourse(course: ICourse): void {
-    course.id = this.courses.length+1;
-    this.courses.push(course);
+  public createCourse(course: ICourse): Observable<ICourse> {
+    return this.httpClient.post<ICourse>(`${this.coursesUrl}/videocourses`, course);
   }
 
-  public getItemById(id: number): ICourse | undefined {
-    return this.courses.find(x => x.id == id);
+  public getItemById(id: number): Observable<ICourse> {
+    return this.httpClient.get<ICourse>(`${this.coursesUrl}/videocourses/${id}`);
   }
 
-  public updateItem(id: number, newData: ICourse): void {
-    let item: ICourse | undefined = this.getItemById(id);
-    if (!item) return;
-    item.title = newData.title;
-    item.topRated = newData.topRated;
-    item.creationDate = newData.creationDate;
-    item.duration = newData.duration;
-    item.description = newData.description;
+  public updateItem(id: number, newData: ICourse): Observable<ICourse> {
+    return this.httpClient.put<ICourse>(`${this.coursesUrl}/videocourses/${id}`, newData);
   }
 
-  public removeItem(id: number): void {
-    for (let i = 0; i < this.courses.length; i++) {
-      if (this.courses[i]["id"] == id) {
-        this.courses.splice(i, 1);
-      }
-    }
+  public removeItem(id: number): Observable<any> {
+    return this.httpClient.delete<ICourse>(`${this.coursesUrl}/videocourses/${id}`);
   }
 }
