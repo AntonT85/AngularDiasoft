@@ -8,7 +8,7 @@ import {ButtonModule} from "primeng/button";
 import {CardModule} from "primeng/card";
 import {InputTextModule} from "primeng/inputtext";
 import {BreadcrumbModule} from "primeng/breadcrumb";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {FilterPipe} from "../shared/pipes/filter/filter.pipe";
 import {CourseAddComponent} from './course-add/course-add.component';
 import {InputTextareaModule} from "primeng/inputtextarea";
@@ -27,13 +27,14 @@ import {CoursesRoutingModule} from './courses-routing.module';
     CoursesListComponent,
   ],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     CommonModule,
     ImageModule,
     ButtonModule,
     CardModule,
     InputTextModule,
     BreadcrumbModule,
-    FormsModule,
     InputTextareaModule,
     InputNumberModule,
     CalendarModule,

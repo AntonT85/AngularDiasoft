@@ -4,10 +4,7 @@
 
 <div class="mb-2 filter">
   <div class="filter-sub">
-    <span class="p-input-icon-left mr-2">
-        <i class="pi pi-search"></i>
-        <input type="text" [(ngModel)]="search" pInputText (keyup)="onSearch()"/>
-    </span>
+    <app-search (search)="onSearch($event)"></app-search>
   </div>
   <div class="filter-sub">
     <button pButton icon="pi pi-plus" label="Добавить курс" (click)="addCourse()"></button>

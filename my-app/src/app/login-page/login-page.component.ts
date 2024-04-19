@@ -16,8 +16,8 @@ export class LoginPageComponent {
     private readonly authService: AuthService) {
   }
 
-  public login() {
-    this.authService.login(this.userLogin, this.userPassword).subscribe(() => {
+  public login(myForm: any) {
+    this.authService.login(myForm.value.userLogin, myForm.value.userPassword).subscribe(() => {
         if (this.authService.isAuthenticated()) {
           console.log("Выполнен вход в систему");
           this.router.navigate(['courses']);
