@@ -5,6 +5,7 @@
   </div>
   <app-footer></app-footer>
 </div>
+<app-spinner *ngIf="showSpinner"></app-spinner>
 
 <p-confirmDialog #confirmDeleteAlert key="confirmDeleteAlert">
   <p-footer>
@@ -14,3 +15,5 @@
             class="p-button-sm p-button-danger"></button>
   </p-footer>
 </p-confirmDialog>
+
+<p-toast></p-toast>

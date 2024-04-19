@@ -14,14 +14,16 @@ export class HeaderComponent {
     private authService: AuthService,
     private readonly router: Router,
   ) {
+    this.authService.loginStr.subscribe((result) => {
+        this.login = result;
+      }
+    );
   }
+
+  public login: string = "";
 
   get isAuthenticated(): boolean | undefined {
     return this.authService.isAuthenticated()
-  };
-
-  get login(): string | undefined {
-    return this.authService.getUserData();
   };
 
   /*

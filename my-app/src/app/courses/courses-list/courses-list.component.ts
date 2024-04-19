@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 import {CoursesService} from "../../services/courses/courses.service";
 import {ICourse} from "../../shared/interfaces/course/course.interface";
 import {FilterPipe} from "../../shared/pipes/filter/filter.pipe";
-import {take, tap} from "rxjs";
+import {BehaviorSubject, debounceTime, filter, merge, Observable, of, Subject, switchMap, take, tap} from "rxjs";
 
 @Component({
   selector: 'app-courses-list',
@@ -14,10 +14,14 @@ import {take, tap} from "rxjs";
 export class CoursesListComponent {
   items: MenuItem[] = [{label: 'Courses', routerLink: '/courses'}];
   home: MenuItem = {icon: 'pi pi-home'};
-
-  public coursesList: ICourse[] = [];
+  private refresh$: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
+  private search$: Subject<ICourse[]> = new Subject<ICourse[]>();
+  public coursesList$: Observable<ICourse[]> = merge(
+    this.refresh$.pipe(switchMap(() => this.coursesService.getList(this.limit, this.search))),
+    this.search$
+  );
   search: any;
-  page: number = 1;
+  limit: number = 10;
 
   constructor(
     private filter: FilterPipe,
@@ -25,17 +29,16 @@ export class CoursesListComponent {
     private confirmationService: ConfirmationService,
     private readonly router: Router
   ) {
-    this.doSearch();
   }
 
   public clearFilter(): void {
     this.search = "";
-    this.page = 1;
+    this.limit = 10;
     this.doSearch();
   }
 
   public loadMore(): void {
-    this.page++;
+    this.limit = this.limit + 10;
     this.doSearch();
   }
 
@@ -60,8 +63,23 @@ export class CoursesListComponent {
 
   }
 
+  onSearch(): void {
+    if (this.search === '') {
+      this.doSearch();
+      return;
+    }
+    of(this.search).pipe(
+      debounceTime(250),
+      filter((value) => !!value && value.length >= 3),
+      switchMap((value) => this.coursesService.getList(this.limit, value.toLowerCase()).pipe(
+        tap((courses) => this.search$.next(courses))
+      ))
+    ).subscribe()
+
+  }
+
   doSearch(): void {
-    this.coursesService.getList(this.page, this.search).subscribe((result) => this.coursesList = result);
+    this.refresh$.next(undefined);
   }
 
   addCourse(): void {
