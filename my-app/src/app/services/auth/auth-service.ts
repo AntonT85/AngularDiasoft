@@ -4,6 +4,7 @@ import {IUser} from "../../shared/interfaces/user/user.interface";
 import {Observable, Subject} from "rxjs";
 import {delay, map} from "rxjs/operators";
 import {SpinnerService} from "../spinner/spinner.service";
+import {MessageService} from "primeng/api";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class AuthService {
 
   constructor(
     private readonly httpClient: HttpClient,
-    private readonly spinnerService: SpinnerService
+    private readonly spinnerService: SpinnerService,
+    private readonly messageService: MessageService
   ) {
   }
 
@@ -28,8 +30,14 @@ export class AuthService {
           localStorage.setItem("userData", result[0].firstName + ' ' + result[0].lastName);
           localStorage.setItem("access_token", result[0].fakeToken);
           this.loginStr.next(localStorage.getItem("userData") + "");
-          this.spinnerService.setShowFlag(false);
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Неккоректные данные для входа в систему'
+          });
         }
+        this.spinnerService.setShowFlag(false);
       })
     );
   }

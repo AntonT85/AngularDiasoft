@@ -2,21 +2,62 @@
   <p-breadcrumb class="max-w-full" [model]="items" [home]="home"></p-breadcrumb>
 </div>
 
-<p-card header="{{header}}" class="coursAdd">
+<form [formGroup]="myForm" class="coursAdd" (ngSubmit)="save()">
+  <p-card header="{{header}}">
+    <div class="flex flex-column gap-5">
+      <div class="field">
+        <span class="p-float-label">
+          <input pInputText id="title" formControlName="title"/>
+          <label for="title">Наименование*</label>
+        </span>
+        <small *ngIf="title.invalid && title.touched" class="invalid-message p-error">
+          <p *ngIf="title.hasError('required')">This field is required</p>
+          <p *ngIf="title.hasError('maxlength')">This field length exceeded</p>
+        </small>
+      </div>
 
-  <div class="flex flex-column gap-5">
-    <input pInputText id="title" [(ngModel)]="title" placeholder="Наименование*"/>
+      <div class="field">
+        <span class="p-float-label">
+          <textarea id="description" rows="5" cols="30" pInputTextarea formControlName="description"></textarea>
+          <label for="description">Описание*</label>
+        </span>
+        <small *ngIf="description.invalid && description.touched" class="invalid-message p-error">
+          <p *ngIf="description.hasError('required')">This field is required</p>
+          <p *ngIf="description.hasError('maxlength')">This field length exceeded</p>
+        </small>
+      </div>
 
-    <textarea id="description" rows="5" cols="30" pInputTextarea [(ngModel)]="description"
-              placeholder="Описание*"></textarea>
-    <app-select-minutes [min]="duration" (minutes)="onMinutesChange($event)"></app-select-minutes>
-    <p-calendar [(ngModel)]="creationDate" [showIcon]="true" placeholder="Дата*"></p-calendar>
-    <app-autor></app-autor>
-  </div>
-  <ng-template pTemplate="footer">
-    <div class="flex gap-2">
-      <button pButton class="p-button-outlined" label="Отмена" (click)="cancel()"></button>
-      <button pButton label="Сохранить" (click)="save()"></button>
+      <div class="field">
+        <app-select-minutes [min]="duration" (minutes)="onMinutesChange($event)"></app-select-minutes>
+        <small *ngIf="durationFC.invalid && durationFC.touched" class="invalid-message p-error">
+          <p *ngIf="durationFC.hasError('required')">This field is required</p>
+          <p *ngIf="durationFC.hasError('pattern')">Only numbers</p>
+        </small>
+      </div>
+
+      <div class="field">
+        <span class="p-float-label">
+          <p-calendar id="creationDate" formControlName="creationDate" [showIcon]="true"
+                      dateFormat="dd/mm/yy"></p-calendar>
+          <label for="creationDate">Дата*</label>
+        </span>
+        <small *ngIf="creationDate.invalid && creationDate.touched" class="invalid-message p-error">
+          <p *ngIf="creationDate.hasError('required')">This field is required</p>
+        </small>
+      </div>
+
+      <div class="field">
+        <app-author [selectedItems]="authors" (authors)="onAuthorsChange($event)"></app-author>
+        <small *ngIf="authorsFC.invalid && authorsFC.touched" class="invalid-message p-error">
+          <p *ngIf="authorsFC.hasError('required')">This field is required</p>
+        </small>
+      </div>
     </div>
-  </ng-template>
-</p-card>
+    <ng-template pTemplate="footer">
+      <div class="flex gap-2">
+        <button pButton class="p-button-outlined" label="Отмена" (click)="cancel()"></button>
+        <button pButton label="Сохранить" type="submit" [disabled]="myForm['invalid']"></button>
+      </div>
+    </ng-template>
+  </p-card>
+</form>

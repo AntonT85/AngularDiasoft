@@ -55,7 +55,7 @@ export class CoursesService {
       );
   }
 
-  public removeItem(id: number): Observable<any> {
+  public removeItem(id: string): Observable<any> {
     this.spinnerService.setShowFlag(true);
     return this.httpClient.delete<ICourse>(`${this.coursesUrl}/videocourses/${id}`)
       .pipe(

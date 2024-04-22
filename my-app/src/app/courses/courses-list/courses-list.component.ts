@@ -63,7 +63,8 @@ export class CoursesListComponent {
 
   }
 
-  onSearch(): void {
+  onSearch(text: string): void {
+    this.search = text;
     if (this.search === '') {
       this.doSearch();
       return;

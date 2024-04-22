@@ -1,16 +1,17 @@
-<p-card header="Вход" class="login">
-  <div class="flex flex-column gap-2">
-    <label for="userLogin">Email*</label>
-    <input pInputText id="userLogin" [(ngModel)]="userLogin"
-           placeholder="Например user@domain.com"/>
-    <label for="userPassword">Пароль*</label>
-    <input pInputText id="userPassword" [(ngModel)]="userPassword"
-           placeholder="Ваш пароль"/>
-  </div>
-  <ng-template pTemplate="footer">
-    <div class="flex">
-      <p><a href="">Забыли пароль?</a></p>
-      <button pButton label="Войти" (click)="login()" class="right"></button>
+<form #myForm="ngForm" class="login" (ngSubmit)="login(myForm)">
+  <p-card header="Вход">
+    <div class="flex flex-column gap-2">
+      <label for="userLogin">Email*</label>
+      <input pInputText id="userLogin" ngModel name="userLogin" required pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+             placeholder="Например user@domain.com"/>
+      <label for="userPassword">Пароль*</label>
+      <input pInputText id="userPassword" ngModel name="userPassword" required placeholder="Ваш пароль"/>
     </div>
-  </ng-template>
-</p-card>
+    <ng-template pTemplate="footer">
+      <div class="flex">
+        <p><a href="">Забыли пароль?</a></p>
+        <button pButton label="Войти" type="submit" class="right" [disabled]="myForm['invalid']"></button>
+      </div>
+    </ng-template>
+  </p-card>
+</form>

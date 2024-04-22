@@ -1,3 +1,6 @@
-<p-inputNumber (onInput)="send()" [(ngModel)]="min" [showButtons]="true"
-               placeholder="Продолжительность*" class="w-6" styleClass="w-full"></p-inputNumber>
-{{min | duration}}
+<span class="p-float-label">
+  <p-inputNumber id="duration" (onInput)="send()" [(ngModel)]="min" [showButtons]="true" class="w-6"
+                 styleClass="w-full"></p-inputNumber>
+  <label for="duration">Продолжительность*</label>
+  {{min | duration}}
+</span>
