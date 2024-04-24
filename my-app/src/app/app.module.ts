@@ -18,6 +18,13 @@ import {SpinnerComponent} from './components/spinner/spinner.component';
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {ErrorCatchInterceptor} from "./interceptors/error-catch/error-catch.interceptor";
 import {ToastModule} from "primeng/toast";
+import {StoreModule} from '@ngrx/store';
+import {metaReducers, reducers} from './store';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {environment} from "./environments/environment";
+import {EffectsModule} from '@ngrx/effects';
+import {AuthEffectsEffects} from './store/auth/effects/auth-effects.effects';
+import {CoursesEffectsEffects} from "./store/courses/effects/courses-effects.effects";
 
 registerLocaleData(localeRu, 'ru');
 
@@ -38,6 +45,9 @@ registerLocaleData(localeRu, 'ru');
     HttpClientModule,
     ProgressSpinnerModule,
     ToastModule,
+    StoreModule.forRoot(reducers, {metaReducers}),
+    !environment.production ? StoreDevtoolsModule.instrument({maxAge: 25}) : [],
+    EffectsModule.forRoot([CoursesEffectsEffects, AuthEffectsEffects]),
   ],
   providers: [
     {provide: LOCALE_ID, useValue: 'ru'},

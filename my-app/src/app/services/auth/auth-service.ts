@@ -2,9 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {IUser} from "../../shared/interfaces/user/user.interface";
 import {Observable, Subject} from "rxjs";
-import {delay, map} from "rxjs/operators";
+import {delay, tap} from "rxjs/operators";
 import {SpinnerService} from "../spinner/spinner.service";
-import {MessageService} from "primeng/api";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,6 @@ export class AuthService {
   constructor(
     private readonly httpClient: HttpClient,
     private readonly spinnerService: SpinnerService,
-    private readonly messageService: MessageService
   ) {
   }
 
@@ -25,19 +23,16 @@ export class AuthService {
     let params = new HttpParams().set('email', email).set('password', password);
     return this.httpClient.get<IUser[]>(`${this.autUrl}/users`, {params}).pipe(
       delay(1000),
-      map((result: IUser[]) => {
+      tap((result: IUser[]) => {
         if (result.length > 0) {
           localStorage.setItem("userData", result[0].firstName + ' ' + result[0].lastName);
           localStorage.setItem("access_token", result[0].fakeToken);
           this.loginStr.next(localStorage.getItem("userData") + "");
+          this.spinnerService.setShowFlag(false);
         } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Неккоректные данные для входа в систему'
-          });
+          this.spinnerService.setShowFlag(false);
+          throw('Неккоректные данные для входа в систему');
         }
-        this.spinnerService.setShowFlag(false);
       })
     );
   }

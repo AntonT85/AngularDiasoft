@@ -14,7 +14,7 @@ export class CoursesService {
   constructor(private readonly httpClient: HttpClient, private readonly spinnerService: SpinnerService) {
   }
 
-  public getList(limit: number, field: string): Observable<ICourse[]> {
+  public getList(limit: number, field?: string): Observable<ICourse[]> {
     this.spinnerService.setShowFlag(true);
     if (!limit) limit = 10;
     let params = new HttpParams().set('_limit', limit);
