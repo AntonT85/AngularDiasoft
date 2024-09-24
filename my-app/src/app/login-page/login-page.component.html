@@ -1,22 +1,16 @@
-<div class="wrapper">
-  <app-header></app-header>
-  <div class="py-2 px-4 page-body">
-    <p-card header="Вход" class="login">
-      <div class="flex flex-column gap-2">
-        <label for="userLogin">Email*</label>
-        <input pInputText id="userLogin" [(ngModel)]="userLogin"
-               placeholder="Например user@domain.com"/>
-        <label for="userPassword">Пароль*</label>
-        <input pInputText id="userPassword" [(ngModel)]="userPassword"
-               placeholder="Ваш пароль"/>
-      </div>
-      <ng-template pTemplate="footer">
-        <div class="flex">
-          <p><a href="">Забыли пароль?</a></p>
-          <button pButton label="Войти" (click)="login()" class="right"></button>
-        </div>
-      </ng-template>
-    </p-card>
+<p-card header="Вход" class="login">
+  <div class="flex flex-column gap-2">
+    <label for="userLogin">Email*</label>
+    <input pInputText id="userLogin" [(ngModel)]="userLogin"
+           placeholder="Например user@domain.com"/>
+    <label for="userPassword">Пароль*</label>
+    <input pInputText id="userPassword" [(ngModel)]="userPassword"
+           placeholder="Ваш пароль"/>
   </div>
-  <app-footer></app-footer>
-</div>
+  <ng-template pTemplate="footer">
+    <div class="flex">
+      <p><a href="">Забыли пароль?</a></p>
+      <button pButton label="Войти" (click)="login()" class="right"></button>
+    </div>
+  </ng-template>
+</p-card>
