@@ -1,0 +1,8 @@
+<span class="p-fluid">
+  <span class="p-float-label">
+      <p-autoComplete id="author" [(ngModel)]="selectedItems" [suggestions]="items" (completeMethod)="filter($event)"
+                      (onSelect)="onChange()" (onUnselect)="onChange()" (onClear)="onChange()" [multiple]="true"
+                      field="name"></p-autoComplete>
+            <label for="author">Авторы*</label>
+  </span>
+</span>
