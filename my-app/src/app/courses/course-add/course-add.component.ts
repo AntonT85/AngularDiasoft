@@ -5,6 +5,9 @@ import {ICourse} from "../../shared/interfaces/course/course.interface";
 import {MenuItem} from "primeng/api";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {IAuthor} from "../../shared/interfaces/author/IAuthor";
+import {Store} from "@ngrx/store";
+import {State} from "../../store";
+import {createCourse, getCourses, updateCourse} from "../../store/courses/actions/courses-actions.actions";
 
 interface CourseForm {
   title: FormControl<string | null>,
@@ -27,7 +30,8 @@ export class CourseAddComponent {
     private readonly route: ActivatedRoute,
     private readonly coursesService: CoursesService,
     private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private readonly store: Store<State>
   ) {
     this.id = route.snapshot.params['id'];
     if (this.id != null) {
@@ -43,6 +47,7 @@ export class CourseAddComponent {
           this.duration = course.duration;
           this.items.push({label: course.title});
           this.authors = course.authors;
+          this.myForm.get('authors')?.setValue(course.authors);
           changeDetectorRef.detectChanges();
         }
       });
@@ -93,9 +98,9 @@ export class CourseAddComponent {
 
   public save(): void {
     if (this.id != null) {
-      this.coursesService.updateItem(this.id, this.myForm.value as ICourse).subscribe()
+      this.store.dispatch(updateCourse({id: this.id, course: this.myForm.value as ICourse}))
     } else {
-      this.coursesService.createCourse(this.myForm.value as ICourse).subscribe();
+      this.store.dispatch(createCourse({course: this.myForm.value as ICourse}))
     }
     this.router.navigate(['courses']);
   }

@@ -1,34 +1,36 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ConfirmationService, MenuItem} from "primeng/api";
 import {Router} from "@angular/router";
-import {CoursesService} from "../../services/courses/courses.service";
 import {ICourse} from "../../shared/interfaces/course/course.interface";
 import {FilterPipe} from "../../shared/pipes/filter/filter.pipe";
-import {BehaviorSubject, debounceTime, filter, merge, Observable, of, Subject, switchMap, take, tap} from "rxjs";
+import {debounceTime, filter, Observable, of, tap} from "rxjs";
+import {State} from "../../store";
+import {Store} from "@ngrx/store";
+import {selectCourses} from "../../store/courses/selectors/courses-selectors.selectors";
+import {getCourses, removeCourse} from "../../store/courses/actions/courses-actions.actions";
 
 @Component({
   selector: 'app-courses-list',
   templateUrl: './courses-list.component.html',
   styleUrls: ['./courses-list.component.less']
 })
-export class CoursesListComponent {
+export class CoursesListComponent implements OnInit {
   items: MenuItem[] = [{label: 'Courses', routerLink: '/courses'}];
   home: MenuItem = {icon: 'pi pi-home'};
-  private refresh$: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
-  private search$: Subject<ICourse[]> = new Subject<ICourse[]>();
-  public coursesList$: Observable<ICourse[]> = merge(
-    this.refresh$.pipe(switchMap(() => this.coursesService.getList(this.limit, this.search))),
-    this.search$
-  );
+  public coursesList$: Observable<ICourse[]> = this.store.select(selectCourses);
   search: any;
   limit: number = 10;
 
   constructor(
     private filter: FilterPipe,
-    private readonly coursesService: CoursesService,
     private confirmationService: ConfirmationService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly store: Store<State>
   ) {
+  }
+
+  ngOnInit(): void {
+    this.doSearch();
   }
 
   public clearFilter(): void {
@@ -38,8 +40,7 @@ export class CoursesListComponent {
   }
 
   public loadMore(): void {
-    this.limit = this.limit + 10;
-    this.doSearch();
+    this.store.dispatch(getCourses({}))
   }
 
   onEditedCourse(course: ICourse): void {
@@ -52,10 +53,7 @@ export class CoursesListComponent {
       message: `Вы действительно хотите удалить этот курс ${course.title}?`,
       key: 'confirmDeleteAlert',
       accept: () => {
-        this.coursesService.removeItem(course.id).pipe(
-          take(1),
-          tap(() => this.doSearch())
-        ).subscribe();
+        this.store.dispatch(removeCourse({id: course.id}));
       },
       reject: () => {
       },
@@ -72,15 +70,13 @@ export class CoursesListComponent {
     of(this.search).pipe(
       debounceTime(250),
       filter((value) => !!value && value.length >= 3),
-      switchMap((value) => this.coursesService.getList(this.limit, value.toLowerCase()).pipe(
-        tap((courses) => this.search$.next(courses))
-      ))
+      tap((value) => this.store.dispatch(getCourses({name: value.toLowerCase()})))
     ).subscribe()
 
   }
 
   doSearch(): void {
-    this.refresh$.next(undefined);
+    this.store.dispatch(getCourses({}))
   }
 
   addCourse(): void {
